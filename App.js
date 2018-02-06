@@ -14,9 +14,7 @@ import messagesData from './data';
 import NavBar from './NavBar';
 import CustomView from './CustomView';
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-});
+const getItemNum = 10;
 
 export default class App extends Component {
 
@@ -24,7 +22,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       messages: [],
-      loadEarlier: true
+      loadEarlier: true,
     };
 
     this.onSend = this.onSend.bind(this);
@@ -38,7 +36,7 @@ export default class App extends Component {
     // init with only system messages
     this.setState({ messages: messagesData.filter((message) => message.system) });
 
-    firebase.database().ref().child('messages').limitToLast(3)
+    firebase.database().ref().child('messages').limitToLast(getItemNum)
     .on('child_added', (child) => {
       const postData = child.val();
       this.setState((previousState) => ({
@@ -88,3 +86,7 @@ export default class App extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
