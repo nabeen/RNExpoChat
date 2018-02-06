@@ -15,6 +15,8 @@ import NavBar from './NavBar';
 import CustomView from './CustomView';
 
 const getItemNum = 10;
+const userName = 'unknown';
+const userAvatar = 'https://source.unsplash.com/sseiVD2XsOk/100x100';
 
 export default class App extends Component {
 
@@ -45,10 +47,7 @@ export default class App extends Component {
             _id: postData._id,
             createdAt: postData.createdAt,
             text: postData.text,
-            user: {
-              _id: postData.user._id === Expo.Constants.deviceId ? 1 : 2,
-              name: 'UnknownUser',
-            },
+            user: postData.user,
             sent: true
           }
         ),
@@ -57,15 +56,14 @@ export default class App extends Component {
   }
 
   onSend(messages = []) {
-    console.log(messages[0]);
+    const data = messages[0];
+    console.log(data);
+
     firebase.database().ref().child('messages').push({
-      _id: messages[0]._id,
+      _id: data._id,
       createdAt: new Date().getTime(),
-      text: messages[0].text,
-      user: {
-        _id: Expo.Constants.deviceId,
-        name: 'UnknownUser'
-      }
+      text: data.text,
+      user: data.user,
     });
   }
 
@@ -79,7 +77,9 @@ export default class App extends Component {
           loadEarlier={this.state.loadEarlier}
           renderCustomView={CustomView}
           user={{
-            _id: 1,
+            _id: Expo.Constants.deviceId,
+            name: userName,
+            avatar: userAvatar
           }}
         />
       </View>
